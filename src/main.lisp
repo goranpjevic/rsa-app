@@ -31,14 +31,13 @@
       (generate-random-odd-coprime lower-bound upper-bound))))
 
 (defun generate-keys ()
-  (multiple-value-bind (p q) (generate-primes number-of-bits)
-    (let ((n (* p q))
-	  (euler (* (1- p) (1- q)))
-	  (e (generate-random-odd-coprime 1 euler))
-	  (d (modular-linear-equation-solver e 1 euler)))
+  (multiple-value-bind (p q) (generate-primes 4)
+    (let* ((n (* p q))
+	   (euler (* (1- p) (1- q)))
+	   (e (generate-random-odd-coprime 1 euler))
+	   (d (modular-linear-equation-solver e 1 euler)))
       (format t "public key: ~d ~d~%" e n)
       (format t "private key: ~d ~d~%" d n))))
-
 
 (defun main (*posix-argv*)
   ; gui main function
