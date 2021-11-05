@@ -19,6 +19,30 @@
 	  (print (mod (+ x0 (* i (floor n d))) n))))
       (print "no solution"))))
 
+(defun generate-primes (number-of-bits)
+  ; return 2 prime numbers of number-of-bits bits
+  ; todo
+  )
+
+(defun generate-random-odd-coprime (lower-bound upper-bound)
+  ; return e
+  ; lower-bound < e < upper-bound
+  ; gcd(e upper-bound)=1
+  (let ((e (+ lower-bound (random (- upper-bound lower-bound)))))
+    (if (= (extended-euclid e upper-bound) 1)
+      e
+      (generate-random-odd-coprime lower-bound upper-bound))))
+
+(defun generate-keys ()
+  (multiple-value-bind (p q) (generate-primes number-of-bits)
+    (let ((n (* p q))
+	  (euler (* (1- p) (1- q)))
+	  (e (generate-random-odd-coprime 1 euler))
+	  (d (modular-linear-equation-solver e 1 euler)))
+      (format t "public key: ~d ~d~%" e n)
+      (format t "private key: ~d ~d~%" d n))))
+
+
 (defun main (*posix-argv*)
   ; gui main function
   (ltk:with-ltk ()
