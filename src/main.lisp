@@ -22,10 +22,10 @@
   (values 13 17))
 
 (defun generate-random-odd-coprime (lower-bound upper-bound)
-  ; return e
+  ; return odd number e
   ; lower-bound < e < upper-bound
   ; gcd(e upper-bound)=1
-  (let ((e (+ lower-bound (random (- upper-bound lower-bound)))))
+  (let ((e (logior (+ lower-bound (random (- upper-bound lower-bound))) 1)))
     (if (= (extended-euclid e upper-bound) 1)
       e
       (generate-random-odd-coprime lower-bound upper-bound))))
