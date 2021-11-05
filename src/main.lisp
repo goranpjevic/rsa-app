@@ -6,6 +6,15 @@
     (multiple-value-bind (d x y) (extended-euclid b (mod a b))
       (values d y (- x (* (floor a b) y))))))
 
+(defun modular-linear-equation-solver (a b n)
+  ; a*x≡b(mod n)
+  (multiple-value-bind (d x) (extended-euclid a n)
+    (if (= (mod d b) 0)
+      (let ((x0 (mod (* x (floor b d)) n)))
+	(dotimes (i d)
+	  (print (mod (+ x0 (* i (floor n d))) n))))
+      (print "no solution"))))
+
 (defun main (*posix-argv*)
   ; gui main function
   (ltk:with-ltk ()
