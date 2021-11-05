@@ -19,7 +19,7 @@
 (defun generate-primes (number-of-bits)
   ; return 2 prime numbers of number-of-bits bits
   ; todo
-  )
+  (values 13 17))
 
 (defun generate-random-odd-coprime (lower-bound upper-bound)
   ; return e
