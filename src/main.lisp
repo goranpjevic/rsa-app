@@ -10,14 +10,11 @@
       (values d y (- x (* (floor a b) y))))))
 
 (defun modular-linear-equation-solver (a b n)
-  ; return solutions for x:
+  ; return x
   ; a*x≡b(mod n)
   (multiple-value-bind (d x) (extended-euclid a n)
     (if (= (mod d b) 0)
-      (let ((x0 (mod (* x (floor b d)) n)))
-	(dotimes (i d)
-	  (print (mod (+ x0 (* i (floor n d))) n))))
-      (print "no solution"))))
+      (mod (mod (* x (floor b d)) n) n))))
 
 (defun generate-primes (number-of-bits)
   ; return 2 prime numbers of number-of-bits bits
