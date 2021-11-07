@@ -99,9 +99,24 @@
 (defun main (*posix-argv*)
   ; gui main function
   (ltk:with-ltk ()
-    ; set window title
-    (ltk:wm-title ltk:*tk* "rsa")
-    ; initialize gui widgets
-    (let ((rsa-button (make-instance 'ltk:button :text "rsa")))
-      ; put gui widgets on grid
-      (ltk:grid rsa-button 0 0 :padx 5 :pady 5))))
+		; set window title
+		(ltk:wm-title ltk:*tk* "rsa")
+		; initialize gui widgets
+		(let ((generate-keys-button (make-instance 'ltk:button :text "generate keys"))
+
+		      (number-of-bits-label (make-instance 'ltk:label :text "number of bits for keys"))
+		      (private-key-label (make-instance 'ltk:label :text "private key file"))
+		      (public-key-label (make-instance 'ltk:label :text "public key file"))
+
+		      (number-of-bits-entry (make-instance 'ltk:entry))
+		      (private-key-entry (make-instance 'ltk:entry))
+		      (public-key-entry (make-instance 'ltk:entry)))
+
+		  (setf (ltk:command generate-keys-button) #'(lambda () (generate-keys 6)))
+
+		  ; put gui widgets on grid
+		  (ltk:grid private-key-label 0 0 :padx 5 :pady 5)
+		  (ltk:grid private-key-entry 0 1 :padx 5 :pady 5)
+		  (ltk:grid public-key-label 1 0 :padx 5 :pady 5)
+		  (ltk:grid public-key-entry 1 1 :padx 5 :pady 5)
+		  (ltk:grid generate-keys-button 2 0 :padx 5 :pady 5))))
