@@ -49,13 +49,18 @@
       ; r is not prime, check r+2
       (generate-random-prime-miller-rabin (+ random-number 2) s)))
 
+(defmacro generate-prime (number-of-bits)
+  `(generate-random-prime-miller-rabin
+	      (+ (ash (lcg (expt 2 (- ,number-of-bits 2))
+			   69069 0)
+		      1)
+		 (expt 2 (1- ,number-of-bits))
+		 1)
+	      1))
+
 (defun generate-primes (number-of-bits)
-  ; return 2 prime numbers of number-of-bits bits
-  (generate-random-prime-naive (+ (ash (lcg (expt 2 (- number-of-bits 2))
-					    69069 0)
-				       1)
-				  (expt 2 (1- number-of-bits))
-				  1)))
+  (values (generate-prime number-of-bits)
+	  (generate-prime number-of-bits)))
 
 (defun extended-euclid (a b)
   ; return (d x y)
@@ -82,8 +87,8 @@
       e
       (generate-random-odd-coprime lower-bound upper-bound))))
 
-(defun generate-keys ()
-  (multiple-value-bind (p q) ((generate-primes 4) (generate-primes 4))
+(defun generate-keys (number-of-bits)
+  (multiple-value-bind (p q) (generate-primes number-of-bits)
     (let* ((n (* p q))
 	   (euler (* (1- p) (1- q)))
 	   (e (generate-random-odd-coprime 1 euler))
