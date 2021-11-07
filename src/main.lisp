@@ -22,8 +22,19 @@
 			    :text "generate keys"
 			    :command
 			    (lambda ()
-			      (generate-keys
-				(read-from-string (ltk:text number-of-bits-entry)))))))
+			      (multiple-value-bind
+				(e d n)
+				(generate-keys
+				  (read-from-string
+				    (ltk:text number-of-bits-entry)))
+				(with-open-file (private-key-file
+						  (ltk:text private-key-entry)
+						  :direction :output)
+				  (format private-key-file "~d ~d" e n))
+				(with-open-file (public-key-file
+						  (ltk:text public-key-entry)
+						  :direction :output)
+				  (format public-key-file "~d ~d" d n)))))))
 
       ; put gui widgets on grid
       (ltk:grid private-key-label 0 0 :padx 5 :pady 5)

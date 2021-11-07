@@ -34,5 +34,4 @@
 	 (euler (* (1- p) (1- q)))
 	 (e (generate-random-odd-coprime 1 euler))
 	 (d (modular-linear-equation-solver e 1 euler)))
-    (format t "public key: ~d ~d~%" e n)
-    (format t "private key: ~d ~d~%" d n)))
+    (values e d n)))
