@@ -28,6 +28,9 @@
       (generate-random-odd-coprime lower-bound upper-bound))))
 
 (defun generate-keys (number-of-bits)
+  ; generate and return rsa keys
+  ; private key pair: e n
+  ; public key pair: d n
   (let* ((p (generate-prime number-of-bits))
 	 (q (generate-prime number-of-bits))
 	 (n (* p q))

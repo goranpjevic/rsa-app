@@ -27,6 +27,7 @@
 				(generate-keys
 				  (read-from-string
 				    (ltk:text number-of-bits-entry)))
+				; output private and public keys to files
 				(with-open-file (private-key-file
 						  (ltk:text private-key-entry)
 						  :direction :output)

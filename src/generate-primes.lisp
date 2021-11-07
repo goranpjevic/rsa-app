@@ -50,7 +50,9 @@
       (generate-random-prime-miller-rabin (+ random-number 2) s)))
 
 (defun generate-prime (number-of-bits)
+  ; return prime number of number-of-bits bits
   (generate-random-prime-miller-rabin
+    ; generate random odd number of number-of-bits bits
     (+ (ash (lcg (expt 2 (- number-of-bits 2))
 		 69069 0)
 	    1)
