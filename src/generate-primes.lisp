@@ -61,5 +61,3 @@
 (defun generate-primes (number-of-bits)
   (values (generate-prime number-of-bits)
 	  (generate-prime number-of-bits)))
-
-

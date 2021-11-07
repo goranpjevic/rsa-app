@@ -35,5 +35,3 @@
 	   (d (modular-linear-equation-solver e 1 euler)))
       (format t "public key: ~d ~d~%" e n)
       (format t "private key: ~d ~d~%" d n))))
-
-
