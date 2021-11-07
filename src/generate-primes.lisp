@@ -57,7 +57,3 @@
 		 (expt 2 (1- ,number-of-bits))
 		 1)
 	      1))
-
-(defun generate-primes (number-of-bits)
-  (values (generate-prime number-of-bits)
-	  (generate-prime number-of-bits)))
