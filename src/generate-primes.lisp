@@ -49,11 +49,11 @@
       ; r is not prime, check r+2
       (generate-random-prime-miller-rabin (+ random-number 2) s)))
 
-(defmacro generate-prime (number-of-bits)
-  `(generate-random-prime-miller-rabin
-	      (+ (ash (lcg (expt 2 (- ,number-of-bits 2))
-			   69069 0)
-		      1)
-		 (expt 2 (1- ,number-of-bits))
-		 1)
-	      1))
+(defun generate-prime (number-of-bits)
+  (generate-random-prime-miller-rabin
+    (+ (ash (lcg (expt 2 (- number-of-bits 2))
+		 69069 0)
+	    1)
+       (expt 2 (1- number-of-bits))
+       1)
+    1))
