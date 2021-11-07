@@ -36,12 +36,12 @@
 			   (update-x (mod (expt x 2) p) p k (1+ i)))))
 	(multiple-value-bind (d k) (find-d-k (1- p) 0)
 	  (dotimes (j s p)
-		(let ((x (modular-exponentiation
-			   (random-number-in-range 2 (- p 2))
-			   d p)))
-		  (if (not (or (equal x 1)
-			       (equal (update-x x p k) (1- p))))
-		    (return-from miller-rabin nil)))))))))
+	    (let ((x (modular-exponentiation
+		       (random-number-in-range 2 (- p 2))
+		       d p)))
+	      (if (not (or (equal x 1)
+			   (equal (update-x x p k) (1- p))))
+		(return-from miller-rabin nil)))))))))
 
 (defun generate-random-prime-miller-rabin (random-number s)
   ; use miller-rabin method for testing prime numbers
