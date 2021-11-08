@@ -2,6 +2,40 @@
 
 (load "src/generate-rsa-keys.lisp")
 
+(defun list-of-bits (number-to-convert)
+  ; convert a number to a list of bits
+  (let ((bits '()))
+    (dotimes (index (integer-length number-to-convert) bits)
+      (push (if (logbitp index number-to-convert) 1 0) bits))))
+
+(defun get-list-of-bits-from-file (input-file-stream)
+  ; return list of bits from the input file
+  ;todo
+  )
+
+(defun write-bits-to-file (output-file-stream list-of-bits)
+  ; output list of bits to an output file
+  ;todo
+  )
+
+(defun rsa-encrypt (e n input-file-stream)
+  ; return the encrypted list of bits from the input file stream, using the
+  ; public rsa key pair (e n)
+  ;todo
+
+  (get-list-of-bits-from-file input-file-stream)
+
+  (modular-exponentiation m e n))
+
+(defun rsa-decrypt (d n input-file-stream)
+  ; return the decrypted list of bits from the input file stream, using the
+  ; private rsa key pair (d n)
+  ;todo
+
+  (get-list-of-bits-from-file input-file-stream)
+
+  (modular-exponentiation c d n))
+
 (defun main (*posix-argv*)
   ; gui main function
   (ltk:with-ltk
