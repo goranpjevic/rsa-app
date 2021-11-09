@@ -2,16 +2,20 @@
 
 (load "src/generate-rsa-keys.lisp")
 
-(defun list-of-bits (number-to-convert)
-  ; convert a number to a list of bits
+(defun byte-to-list-of-bits (byte-to-convert)
+  ; convert a byte to a list of bits
   (let ((bits '()))
-    (dotimes (index (integer-length number-to-convert) bits)
-      (push (if (logbitp index number-to-convert) 1 0) bits))))
+    (dotimes (index 8 bits)
+      (push (if (logbitp index byte-to-convert) 1 0) bits))))
 
-(defun get-list-of-bits-from-file (input-file-stream)
+(defun get-list-of-bits-from-file (input-file-stream &optional (lst '()))
   ; return list of bits from the input file
-  ;todo
-  )
+  (let ((byte-read (read-byte input-file-stream nil)))
+    (if byte-read
+      (get-list-of-bits-from-file
+        input-file-stream
+        (append lst (byte-to-list-of-bits byte-read)))
+      lst)))
 
 (defun write-bits-to-file (output-file-stream list-of-bits)
   ; output list of bits to an output file
