@@ -17,10 +17,26 @@
         (append lst (byte-to-list-of-bits byte-read)))
       lst)))
 
+(defun convert-list-of-bits-to-byte (list-of-bits &optional (index 7) (byte 0))
+  ; convert a list of 8 bits to a byte
+  (if (null list-of-bits)
+    byte
+    (convert-list-of-bits-to-byte
+      (cdr list-of-bits)
+      (1- index)
+      (+ byte
+         (if (= 1 (car list-of-bits))
+           (expt 2 index)
+           0)))))
+
 (defun write-bits-to-file (output-file-stream list-of-bits)
   ; output list of bits to an output file
-  ;todo
-  )
+  (if (not (null list-of-bits))
+    (progn
+      ; write byte to the output file
+      (write-byte (convert-list-of-bits-to-byte (subseq list-of-bits 0 8))
+                  output-file-stream)
+      (write-bits-to-file output-file-stream (subseq list-of-bits 8)))))
 
 (defun rsa-encrypt (e n input-file-stream)
   ; return the encrypted list of bits from the input file stream, using the
@@ -84,7 +100,12 @@
 	       (lambda ()
 		 (with-open-file (public-key-file (ltk:text public-key-entry))
 		   (with-open-file (unencrypted-file (ltk:text unencrypted-file-entry))
-		     (with-open-file (encrypted-file (ltk:text encrypted-file-entry))
+                                     :element-type 'unsigned-byte)
+		     (with-open-file (encrypted-file (ltk:text encrypted-file-entry)
+                                       :direction :output
+                                       :if-exists :overwrite
+                                       :if-does-not-exist :create
+                                       :element-type 'unsigned-byte)
 		       (write-bits-to-file
 			 encrypted-file
 			 (rsa-encrypt
@@ -99,8 +120,13 @@
 	       :command
 	       (lambda ()
 		 (with-open-file (private-key-file (ltk:text public-key-entry))
-		   (with-open-file (unencrypted-file (ltk:text unencrypted-file-entry))
-		     (with-open-file (encrypted-file (ltk:text encrypted-file-entry))
+		   (with-open-file (unencrypted-file (ltk:text unencrypted-file-entry)
+                                     :direction :output
+                                     :if-exists :overwrite
+                                     :if-does-not-exist :create
+                                     :element-type 'unsigned-byte)
+		     (with-open-file (encrypted-file (ltk:text encrypted-file-entry)
+                                       :element-type 'unsigned-byte)
 		       (write-bits-to-file
 			 unencrypted-file
 			 (rsa-decrypt
