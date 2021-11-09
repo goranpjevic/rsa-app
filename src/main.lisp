@@ -17,15 +17,15 @@
         (append lst (byte-to-list-of-bits byte-read)))
       lst)))
 
-(defun convert-list-of-bits-to-byte (list-of-bits &optional (index 7) (byte 0))
-  ; convert a list of 8 bits to a byte
+(defun convert-list-of-bits-to-number (list-of-bits &optional (index 0) (number 0))
+  ; convert a list of bits to a number
   (if (null list-of-bits)
-    byte
-    (convert-list-of-bits-to-byte
-      (cdr list-of-bits)
-      (1- index)
-      (+ byte
-         (if (= 1 (car list-of-bits))
+    number
+    (convert-list-of-bits-to-number
+      (butlast list-of-bits)
+      (1+ index)
+      (+ number
+         (if (= 1 (car (last list-of-bits)))
            (expt 2 index)
            0)))))
 
@@ -34,7 +34,7 @@
   (if (not (null list-of-bits))
     (progn
       ; write byte to the output file
-      (write-byte (convert-list-of-bits-to-byte (subseq list-of-bits 0 8))
+      (write-byte (convert-list-of-bits-to-number (subseq list-of-bits 0 8))
                   output-file-stream)
       (write-bits-to-file output-file-stream (subseq list-of-bits 8)))))
 
@@ -42,6 +42,7 @@
   ; return the encrypted list of bits from the input file stream, using the
   ; public rsa key pair (e n)
   ;todo
+  ; NOTE: the output length of the encrypted list of bits must be divisible by 8
 
   (get-list-of-bits-from-file input-file-stream)
 
