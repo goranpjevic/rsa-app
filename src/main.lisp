@@ -44,11 +44,16 @@
     ; set window title
     (ltk:wm-title ltk:*tk* "rsa")
     ; initialize gui widgets
-    (let* ((number-of-bits-label (make-instance 'ltk:label :text "number of bits for keys"))
-	   (private-key-label (make-instance 'ltk:label :text "private key file"))
-	   (public-key-label (make-instance 'ltk:label :text "public key file"))
-	   (unencrypted-file-label (make-instance 'ltk:label :text "unencrypted file"))
-	   (encrypted-file-label (make-instance 'ltk:label :text "encrypted file"))
+    (let* ((number-of-bits-label
+	     (make-instance 'ltk:label :text "number of bits for keys"))
+	   (private-key-label
+	     (make-instance 'ltk:label :text "private key file"))
+	   (public-key-label
+	     (make-instance 'ltk:label :text "public key file"))
+	   (unencrypted-file-label
+	     (make-instance 'ltk:label :text "unencrypted file"))
+	   (encrypted-file-label
+	     (make-instance 'ltk:label :text "encrypted file"))
 
 	   (number-of-bits-entry (make-instance 'ltk:entry))
 	   (private-key-entry (make-instance 'ltk:entry))
