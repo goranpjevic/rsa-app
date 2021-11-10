@@ -21,6 +21,21 @@
   (get-list-of-bits-from-file input-file-stream)
 
   (modular-exponentiation c d n))
+(defmacro rsa-to-file (key-file-entry input-file-entry output-file-entry)
+  `(with-open-file (key-file (ltk:text ,key-file-entry))
+     (with-open-file (input-file (ltk:text ,input-file-entry)
+				 :element-type 'unsigned-byte)
+       (with-open-file (output-file (ltk:text ,output-file-entry)
+				    :direction :output
+				    :if-exists :overwrite
+				    :if-does-not-exist :create
+				    :element-type 'unsigned-byte)
+	 (write-bits-to-file
+	   output-file
+	   (rsa
+	     (read key-file)
+	     (read key-file)
+	     (read-list-of-bits-from-file input-file)))))))
 
 (defun main (*posix-argv*)
   ; gui main function
@@ -43,62 +58,33 @@
 
 	   (generate-keys-button
 	     (make-instance
-	       'ltk:button
-	       :text "generate keys"
-	       :command
+	       'ltk:button :text "generate keys" :command
 	       (lambda ()
 		 (multiple-value-bind
 		   (e d n)
-		   (generate-keys (read-from-string (ltk:text number-of-bits-entry)))
+		   (generate-keys
+		     (read-from-string (ltk:text number-of-bits-entry)))
 		   ; output private and public keys to files
-		   (with-open-file (private-key-file (ltk:text private-key-entry)
+		   (with-open-file (private-key-file
+				     (ltk:text private-key-entry)
 				     :direction :output)
 		     (format private-key-file "~d ~d" e n))
-		   (with-open-file (public-key-file (ltk:text public-key-entry)
+		   (with-open-file (public-key-file
+				     (ltk:text public-key-entry)
 				     :direction :output)
 		     (format public-key-file "~d ~d" d n))))))
 
 	   (encrypt-file-button
-	     (make-instance
-	       'ltk:button
-	       :text "encrypt file"
-	       :command
-	       (lambda ()
-		 (with-open-file (public-key-file (ltk:text public-key-entry))
-		   (with-open-file (unencrypted-file (ltk:text unencrypted-file-entry))
-                                     :element-type 'unsigned-byte)
-		     (with-open-file (encrypted-file (ltk:text encrypted-file-entry)
-                                       :direction :output
-                                       :if-exists :overwrite
-                                       :if-does-not-exist :create
-                                       :element-type 'unsigned-byte)
-		       (write-bits-to-file
-			 encrypted-file
-			 (rsa-encrypt
-			   (read public-key-file)
-			   (read public-key-file)
-			   unencrypted-file))))))))
+	     (make-instance 'ltk:button :text "encrypt file" :command
+			    (lambda () (rsa-to-file public-key-entry
+						    unencrypted-file-entry
+						    encrypted-file-entry))))
 
-	   (deencrypt-file-button
-	     (make-instance
-	       'ltk:button
-	       :text "decrypt file"
-	       :command
-	       (lambda ()
-		 (with-open-file (private-key-file (ltk:text public-key-entry))
-		   (with-open-file (unencrypted-file (ltk:text unencrypted-file-entry)
-                                     :direction :output
-                                     :if-exists :overwrite
-                                     :if-does-not-exist :create
-                                     :element-type 'unsigned-byte)
-		     (with-open-file (encrypted-file (ltk:text encrypted-file-entry)
-                                       :element-type 'unsigned-byte)
-		       (write-bits-to-file
-			 unencrypted-file
-			 (rsa-decrypt
-			   (read private-key-file)
-			   (read private-key-file)
-			   unencrypted-file)))))))))
+	   (decrypt-file-button
+	     (make-instance 'ltk:button :text "decrypt file" :command
+			    (lambda () (rsa-to-file private-key-entry
+						    encrypted-file-entry
+						    unencrypted-file-entry)))))
 
       ; put gui widgets on grid
       (ltk:grid private-key-label 0 0 :padx 5 :pady 5)
