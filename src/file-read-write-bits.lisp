@@ -1,3 +1,5 @@
+; read and write a list bits from and to files
+
 (defun number-to-list-of-bits (byte-to-convert &optional (size 8))
   ; convert a byte to a list of bits
   (let ((bits '()))
