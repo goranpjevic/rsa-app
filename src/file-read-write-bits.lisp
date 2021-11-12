@@ -1,5 +1,7 @@
 ; read and write a list bits from and to files
 
+(load "src/list-utils.lisp")
+
 (defun read-list-of-bits-from-file (input-file-stream &optional (lst '()))
   ; return list of bits from the input file
   (let ((byte-read (read-byte input-file-stream nil)))
