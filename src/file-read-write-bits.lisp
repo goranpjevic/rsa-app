@@ -15,11 +15,11 @@
         (append lst (number-to-list-of-bits byte-read)))
       lst)))
 
-(defun convert-list-of-bits-to-number (list-of-bits &optional (index 0) (number 0))
+(defun list-of-bits-to-number (list-of-bits &optional (index 0) (number 0))
   ; convert a list of bits to a number
   (if (null list-of-bits)
     number
-    (convert-list-of-bits-to-number
+    (list-of-bits-to-number
       (butlast list-of-bits)
       (1+ index)
       (+ number
@@ -37,7 +37,7 @@
 		list-of-bits
 		(append list-of-bits (make-list (- 8 (length list-of-bits))
 						:initial-element 0)))))
-	(write-byte (convert-list-of-bits-to-number (subseq new-list-of-bits 0 8))
+	(write-byte (list-of-bits-to-number (subseq new-list-of-bits 0 8))
 		    output-file-stream)
 	(write-bits-to-file output-file-stream (subseq new-list-of-bits 8))))))
 
