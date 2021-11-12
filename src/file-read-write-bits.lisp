@@ -40,3 +40,17 @@
 	(write-byte (convert-list-of-bits-to-number (subseq new-list-of-bits 0 8))
 		    output-file-stream)
 	(write-bits-to-file output-file-stream (subseq new-list-of-bits 8))))))
+
+(defun split-list-by-n (list n)
+  ; split a list to a list of lists of length n
+  (do ((nn (1- n) (1- nn))
+       (part '())
+       (parts '()))
+    ((endp list)
+     (nreverse (if (endp part) parts
+		 (list* (nreverse part) parts))))
+    (push (pop list) part)
+    (when (zerop nn)
+      (push (nreverse part) parts)
+      (setf part '()
+	    nn n))))
