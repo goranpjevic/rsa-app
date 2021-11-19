@@ -61,11 +61,16 @@
 	   (encrypted-file-label
 	     (make-instance 'ltk:label :text "encrypted file"))
 
-	   (number-of-bits-entry (make-instance 'ltk:entry))
-	   (private-key-entry (make-instance 'ltk:entry))
-	   (public-key-entry (make-instance 'ltk:entry))
-	   (unencrypted-file-entry (make-instance 'ltk:entry))
-	   (encrypted-file-entry (make-instance 'ltk:entry))
+	   (number-of-bits-entry (make-instance 'ltk:entry
+						:text "4"))
+	   (private-key-entry (make-instance 'ltk:entry
+					     :text "keys/private.txt"))
+	   (public-key-entry (make-instance 'ltk:entry
+					     :text "keys/public.txt"))
+	   (unencrypted-file-entry (make-instance 'ltk:entry
+					     :text "keys/aa.txt"))
+	   (encrypted-file-entry (make-instance 'ltk:entry
+					     :text "keys/aae.txt"))
 
 	   (generate-keys-button
 	     (make-instance
