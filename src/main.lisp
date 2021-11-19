@@ -79,11 +79,11 @@
 		   (with-open-file (private-key-file
 				     (ltk:text private-key-entry)
 				     :direction :output)
-		     (format private-key-file "~d ~d" e n))
+		     (format private-key-file "~d ~d" d n))
 		   (with-open-file (public-key-file
 				     (ltk:text public-key-entry)
 				     :direction :output)
-		     (format public-key-file "~d ~d" d n))))))
+		     (format public-key-file "~d ~d" e n))))))
 
 	   (encrypt-file-button
 	     (make-instance 'ltk:button :text "encrypt file" :command
