@@ -3,25 +3,31 @@
 (load "src/generate-rsa-keys.lisp")
 (load "src/file-read-write-bits.lisp")
 
-(defun rsa-encrypt (e n input-file-stream)
-  ; return the encrypted list of bits from the input file stream, using the
-  ; public rsa key pair (e n)
-  ;todo
-  ; NOTE: the output length of the encrypted list of bits must be divisible by 8
+(defun rsa (list-of-bits number-of-bits k n)
+  (mapcan #'(lambda (sublst)
+	      (number-to-list-of-bits
+		(modular-exponentiation
+		  (list-of-bits-to-number sublst)
+		  k n)
+		number-of-bits))
+	  (split-list-by-n list-of-bits number-of-bits)))
 
-  (get-list-of-bits-from-file input-file-stream)
+(defun rsa-encrypt (e n list-of-bits
+			 &optional (number-of-bits (ceiling (log n 2))))
+  ; todo: add trailing zeroes to list-of-bits, so the length of list-of-bits is
+  ; divisible by number-of-bits
+  (rsa e n list-of-bits number-of-bits))
 
-  (modular-exponentiation m e n))
+(defun rsa-decrypt (d n list-of-bits
+			 &optional (number-of-bits (ceiling (log n 2))))
+  ; todo: remove trailing zeroes from list-of-bits, so the length of
+  ; list-of-bits is divisible by number-of-bits
+  (rsa d n list-of-bits number-of-bits)
+  ; todo: remove trailing zeroes from list-of-bits, so the length of
+  ; list-of-bits is divisible by 8
+  )
 
-(defun rsa-decrypt (d n input-file-stream)
-  ; return the decrypted list of bits from the input file stream, using the
-  ; private rsa key pair (d n)
-  ;todo
-
-  (get-list-of-bits-from-file input-file-stream)
-
-  (modular-exponentiation c d n))
-(defmacro rsa-to-file (key-file-entry input-file-entry output-file-entry)
+(defmacro rsa-to-file (key-file-entry input-file-entry output-file-entry rsa-func)
   `(with-open-file (key-file (ltk:text ,key-file-entry))
      (with-open-file (input-file (ltk:text ,input-file-entry)
 				 :element-type 'unsigned-byte)
@@ -32,7 +38,7 @@
 				    :element-type 'unsigned-byte)
 	 (write-bits-to-file
 	   output-file
-	   (rsa
+	   (rsa-func
 	     (read key-file)
 	     (read key-file)
 	     (read-list-of-bits-from-file input-file)))))))
@@ -83,13 +89,15 @@
 	     (make-instance 'ltk:button :text "encrypt file" :command
 			    (lambda () (rsa-to-file public-key-entry
 						    unencrypted-file-entry
-						    encrypted-file-entry))))
+						    encrypted-file-entry
+						    rsa-encrypt))))
 
 	   (decrypt-file-button
 	     (make-instance 'ltk:button :text "decrypt file" :command
 			    (lambda () (rsa-to-file private-key-entry
 						    encrypted-file-entry
-						    unencrypted-file-entry)))))
+						    unencrypted-file-entry
+						    rsa-decrypt)))))
 
       ; put gui widgets on grid
       (ltk:grid private-key-label 0 0 :padx 5 :pady 5)
