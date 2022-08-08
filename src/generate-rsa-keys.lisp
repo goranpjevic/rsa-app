@@ -1,7 +1,5 @@
 ; generate rsa keys
 
-(load "src/generate-primes.lisp")
-
 (defun extended-euclid (a b)
   ; return (d x y)
   ; d=gcd(a b)

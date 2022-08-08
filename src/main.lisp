@@ -1,7 +1,4 @@
-(ql:quickload :ltk)
-
-(load "src/generate-rsa-keys.lisp")
-(load "src/file-read-write-bits.lisp")
+(in-package #:rsa-app)
 
 (defun rsa (list-of-bits number-of-bits k n)
   (mapcan #'(lambda (sublst)
