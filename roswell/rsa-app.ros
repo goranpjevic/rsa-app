@@ -1,0 +1,17 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#|
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp(ql:quickload '(rsa-app) :silent t)
+  )
+
+(defpackage :ros.script.rsa-app.3868941252
+  (:use :cl))
+(in-package :ros.script.rsa-app.3868941252)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (rsa-app:main ()))
