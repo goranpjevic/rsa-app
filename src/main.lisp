@@ -35,7 +35,7 @@
 				    :element-type 'unsigned-byte)
 	 (write-bits-to-file
 	   output-file
-	   (rsa-func
+	   (,rsa-func
 	     (read key-file)
 	     (read key-file)
 	     (read-list-of-bits-from-file input-file)))))))
