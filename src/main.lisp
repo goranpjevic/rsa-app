@@ -1,28 +1,33 @@
 (in-package #:rsa-app)
 
-(defun rsa (list-of-bits number-of-bits k n)
+(defun rsa (k n list-of-bits number-of-bits-to-read number-of-bits-to-write)
   (mapcan #'(lambda (sublst)
 	      (number-to-list-of-bits
 		(modular-exponentiation
 		  (list-of-bits-to-number sublst)
 		  k n)
-		number-of-bits))
-	  (split-list-by-n list-of-bits number-of-bits)))
+		number-of-bits-to-write))
+	  (split-list-by-n list-of-bits number-of-bits-to-read)))
 
 (defun rsa-encrypt (e n list-of-bits
-			 &optional (number-of-bits (ceiling (log n 2))))
-  ; todo: add trailing zeroes to list-of-bits, so the length of list-of-bits is
-  ; divisible by number-of-bits
-  (rsa e n list-of-bits number-of-bits))
+		      &optional (number-of-bits (- (ceiling (log n 2)) 1)))
+  (rsa e n
+       (append list-of-bits
+	       (make-list (- number-of-bits (mod (length list-of-bits) number-of-bits))
+			  :initial-element 0))
+       number-of-bits (+ number-of-bits 1)))
 
 (defun rsa-decrypt (d n list-of-bits
-			 &optional (number-of-bits (ceiling (log n 2))))
-  ; todo: remove trailing zeroes from list-of-bits, so the length of
-  ; list-of-bits is divisible by number-of-bits
-  (rsa d n list-of-bits number-of-bits)
-  ; todo: remove trailing zeroes from list-of-bits, so the length of
-  ; list-of-bits is divisible by 8
-  )
+		      &optional (number-of-bits (- (ceiling (log n 2)) 1)))
+  (let ((rsa-out (rsa d n
+		      (subseq list-of-bits 0
+			      (- (length list-of-bits)
+				 (let ((remainder (mod (length list-of-bits) (+ number-of-bits 1))))
+				   (if (= remainder 0)
+				     (+ number-of-bits 1)
+				     remainder))))
+		      (+ number-of-bits 1) number-of-bits)))
+    (subseq rsa-out 0 (- (length rsa-out) (mod (length rsa-out) 8)))))
 
 (defmacro rsa-to-file (key-file-entry input-file-entry output-file-entry rsa-func)
   `(with-open-file (key-file (ltk:text ,key-file-entry))
