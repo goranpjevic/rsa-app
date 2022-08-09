@@ -32,9 +32,9 @@
   ; private key pair: e n
   ; public key pair: d n
   (let* ((p (generate-prime number-of-bits))
-	 (q (generate-prime number-of-bits))
-	 (n (* p q))
-	 (euler (* (1- p) (1- q)))
-	 (e (generate-random-odd-coprime 1 euler))
-	 (d (modular-linear-equation-solver e 1 euler)))
+         (q (generate-prime number-of-bits))
+         (n (* p q))
+         (euler (* (1- p) (1- q)))
+         (e (generate-random-odd-coprime 1 euler))
+         (d (modular-linear-equation-solver e 1 euler)))
     (values e d n)))

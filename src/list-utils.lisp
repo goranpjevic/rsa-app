@@ -16,9 +16,9 @@
       (butlast list-of-bits)
       (1+ index)
       (+ number
-	 (if (= 1 (car (last list-of-bits)))
-	   (expt 2 index)
-	   0)))))
+         (if (= 1 (car (last list-of-bits)))
+           (expt 2 index)
+           0)))))
 
 (defun split-list-by-n (list n)
   ; split a list to a list of lists of length n
@@ -27,9 +27,9 @@
        (parts '()))
     ((endp list)
      (nreverse (if (endp part) parts
-		 (list* (nreverse part) parts))))
+                 (list* (nreverse part) parts))))
     (push (pop list) part)
     (when (zerop nn)
       (push (nreverse part) parts)
       (setf part '()
-	    nn n))))
+            nn n))))

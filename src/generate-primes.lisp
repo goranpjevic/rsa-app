@@ -26,24 +26,24 @@
   (if (<= p 3) p
     (if (not (evenp p))
       (labels ((find-d-k (d k)
-			 ; return d and k, such that d*(2^k)=p-1
-			 (if (evenp d)
-			   (find-d-k (/ d 2) (1+ k))
-			   (values d k)))
-	       (update-x (x p k &optional (i 0))
-			 ; if ∃i:a^(d*2^i)≡−1 (mod p), then p is probably prime
-			 (if (or (> i (1- k))
-				 (equal x (1- p)))
-			   x
-			   (update-x (mod (expt x 2) p) p k (1+ i)))))
-	(multiple-value-bind (d k) (find-d-k (1- p) 0)
-	  (dotimes (j s p)
-	    (let ((x (modular-exponentiation
-		       (random-number-in-range 2 (- p 2))
-		       d p)))
-	      (if (not (or (equal x 1)
-			   (equal (update-x x p k) (1- p))))
-		(return-from miller-rabin nil)))))))))
+                         ; return d and k, such that d*(2^k)=p-1
+                         (if (evenp d)
+                           (find-d-k (/ d 2) (1+ k))
+                           (values d k)))
+               (update-x (x p k &optional (i 0))
+                         ; if ∃i:a^(d*2^i)≡−1 (mod p), then p is probably prime
+                         (if (or (> i (1- k))
+                                 (equal x (1- p)))
+                           x
+                           (update-x (mod (expt x 2) p) p k (1+ i)))))
+        (multiple-value-bind (d k) (find-d-k (1- p) 0)
+          (dotimes (j s p)
+            (let ((x (modular-exponentiation
+                       (random-number-in-range 2 (- p 2))
+                       d p)))
+              (if (not (or (equal x 1)
+                           (equal (update-x x p k) (1- p))))
+                (return-from miller-rabin nil)))))))))
 
 (defun generate-random-prime-miller-rabin (random-number s)
   ; use miller-rabin method for testing prime numbers
@@ -56,8 +56,8 @@
   (generate-random-prime-miller-rabin
     ; generate random odd number of number-of-bits bits
     (+ (ash (lcg (expt 2 (- number-of-bits 2))
-		 69069 0)
-	    1)
+                 69069 0)
+            1)
        (expt 2 (1- number-of-bits))
        1)
     1))
