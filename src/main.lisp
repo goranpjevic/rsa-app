@@ -45,7 +45,7 @@
              (read key-file)
              (read-list-of-bits-from-file input-file)))))))
 
-(defun main (*posix-argv*)
+(defun main ()
   ; gui main function
   (ltk:with-ltk
     ()
