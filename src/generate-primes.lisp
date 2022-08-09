@@ -1,5 +1,7 @@
 ; generate prime numbers
 
+(in-package #:rsa-app)
+
 ; seed for the lcg
 (defvar *r* 1)
 ; linear congruential generator

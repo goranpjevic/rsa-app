@@ -1,5 +1,7 @@
 ; functions used to work with lists
 
+(in-package #:rsa-app)
+
 (defun number-to-list-of-bits (byte-to-convert &optional (size 8))
   ; convert a byte to a list of bits
   (let ((bits '()))
